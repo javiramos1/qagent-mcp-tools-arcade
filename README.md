@@ -283,38 +283,6 @@ docker build -t qagent-arcade .
 docker run -p 8000:8000 --env-file .env qagent-arcade
 ```
 
-# Configure environment
-cp .env.example .env
-# Edit .env with your API keys
-
-# Start MCP server (Terminal 1)
-qagent_venv/bin/fastmcp run mcp_server.py --transport streamable-http --port 8001
-
-# Start FastAPI app (Terminal 2)
-python main.py
-```
-
-### Option 3: Docker Compose (Production Ready)
-
-The Docker setup automatically runs both the MCP server and FastAPI client in separate containers with proper networking:
-
-```bash
-# Clone and setup
-git clone https://github.com/javiramos1/qagent-mcp.git
-cd qagent-mcp
-
-# Configure environment
-cp .env.example .env
-# Edit .env with your API keys
-
-# Build and start both services
-make docker-build
-make docker-run
-
-# Check service health
-make docker-logs
-
-# Access the API at http://localhost:8000
 ## 🔧 Configuration
 
 ### Required Environment Variables
@@ -348,18 +316,6 @@ LLM_TIMEOUT=60                              # LLM response timeout in seconds
 - ❌ No MCP client session management
 - ✅ Direct API integration via langchain-arcade
 - ✅ Standard HTTP API error handling
-
-# MCP Server Tool Configuration
-MAX_RESULTS=10                  # Maximum search results per query
-SEARCH_DEPTH=basic              # Search depth: basic or advanced
-MAX_CONTENT_SIZE=10000          # Maximum content size per result
-MAX_SCRAPE_LENGTH=20000         # Maximum content length for web scraping (characters)
-ENABLE_SEARCH_SUMMARIZATION=false  # Enable AI summarization of search results (reduces tokens 60-80%)
-```
-
-## 🏗️ MCP-Based System Architecture
-
-The key innovation in this version is the **Model Context Protocol (MCP)** architecture that separates tools from the main application:
 
 ## 🏗️ Direct API System Architecture
 
@@ -546,7 +502,7 @@ curl http://localhost:8000/health
   "status": "healthy",
   "version": "1.0.0",
   "active_sessions": 3,
-  "mcp_server_url": "http://127.0.0.1:8001/mcp"
+  "arcade_api_connected": true
 }
 ```
 
@@ -727,7 +683,7 @@ For ongoing development after initial setup (see Quick Start section above):
 # Then test locally:
 make run
 
-# The application will automatically connect to arcade.dev's MCP service
+# The application will automatically connect to arcade.dev's API
 # No separate MCP server needed!
 ```
 
@@ -744,12 +700,8 @@ make docker-rebuild
 make format      # Format code
 make lint        # Check code quality
 
-# Test MCP server functionality
-make mcp-test    # Test MCP server
-
-# Run the system (2 terminals)
-make mcp-server  # Terminal 1: Start MCP server
-make run         # Terminal 2: Start FastAPI app
+# Test the application
+make run         # Start FastAPI app
 ```
 
 #### Docker Development Workflow
@@ -763,12 +715,8 @@ make lint        # Check code quality
 
 # Test with Docker environment
 make docker-build    # Build updated image
-make docker-run      # Start both services
+make docker-run      # Start application
 make docker-logs     # Monitor logs
-
-# Debug specific services if needed
-make docker-logs-mcp # Debug MCP server
-make docker-logs-api # Debug FastAPI client
 ```
 
 ### Docker Development Benefits
