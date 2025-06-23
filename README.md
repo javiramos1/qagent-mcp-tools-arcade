@@ -67,6 +67,32 @@ Traditional AI tool integration faces three major challenges that MCP solves ele
 
 [Arcade.dev](https://docs.arcade.dev/home) transforms MCP from a protocol specification into a production-ready platform, providing the infrastructure and tools necessary for enterprise-grade AI applications. One of its most powerful features is how it handles authentication for third-party services.
 
+#### Advanced Authentication Capabilities
+
+Arcade.dev provides comprehensive authentication solutions that go far beyond what's currently available in MCP:
+
+**Built-in OAuth 2.0 Providers**: Arcade.dev supports [15+ popular services](https://docs.arcade.dev/home/auth-providers) including:
+- **Development Tools**: GitHub, GitLab, Bitbucket
+- **Communication**: Slack, Discord, Microsoft Teams
+- **Productivity**: Google Workspace, Microsoft 365, Notion, Asana
+- **Social & Media**: LinkedIn, Reddit, Twitter/X, Spotify
+- **Business**: Salesforce, HubSpot, Dropbox, Zoom
+
+**Tool-Level Authentication**: Each tool can specify exactly what permissions it needs:
+```python
+@tool(requires_auth=Slack(scopes=["chat:write", "users:read"]))
+def send_slack_message(context: ToolContext, message: str):
+    # Tool has authenticated access to user's Slack
+    slack_client = WebClient(token=context.authorization.token)
+    # ... implementation
+```
+
+**User Authorization Flow**: When a tool requires authentication:
+1. Arcade automatically generates a secure authorization URL
+2. User completes OAuth flow in their browser
+3. Arcade securely stores and manages tokens
+4. Future tool calls automatically include valid authentication
+
 #### Authentication Delegation
 
 A common challenge in AI applications is securely accessing services like GitHub, Slack, or Google Workspace on behalf of users. Traditional approaches require managing OAuth flows, storing refresh tokens, and handling token rotation for each service individually. This creates significant security risks and maintenance overhead.
@@ -403,16 +429,78 @@ graph TD
 - **🔮 Future-Proof**: Designed for long-term AI infrastructure needs
 
 **Current MCP Limitations**:
-- **🔐 Authentication Gap**: Lacks enterprise-grade authentication mechanisms
-- **🏢 Production Readiness**: Security model not yet suitable for enterprise deployment
+- **🔐 Authentication Gap**: The [MCP Authorization specification](https://modelcontextprotocol.io/specification/2025-03-26/basic/authorization) defines OAuth 2.1 flows but lacks production-ready implementations
+- **🏢 Single-User Focus**: 99% of current MCP servers are designed for single-user scenarios with personal access tokens
+- **⚠️ Multi-User Challenges**: No standardized way to handle multi-user authentication or user context switching
+- **🔒 Production Security Gaps**: Missing enterprise-grade token management, user session isolation, and audit trails
+- **🏗️ Implementation Complexity**: OAuth 2.1 with PKCE, dynamic client registration, and metadata discovery creates high implementation barriers
 
 **This Project's Trade-offs**:
-- **✅ Immediate Security**: Direct API authentication solves current authentication needs
+- **✅ Immediate Security**: Direct API authentication solves current authentication needs with production-ready OAuth flows
+- **✅ Enterprise Features**: Built-in user authorization, token management, and multi-user support
+- **✅ Developer Experience**: Simple `@tool(requires_auth=Slack(...))` vs complex OAuth 2.1 implementation
 - **❌ Non-Standard**: Bypasses emerging MCP protocol standards
 - **❌ Vendor Lock-in**: Direct API ties implementation to arcade.dev specifically
 - **❌ Ecosystem Isolation**: Doesn't contribute to broader MCP ecosystem development
 
-**Migration Strategy**: Once arcade.dev implements MCP with proper authentication, **immediately migrate back to MCP** for standard compliance and ecosystem benefits.
+**Specific Authentication Advantages** (vs current MCP):
+- **Built-in OAuth Providers**: 15+ services vs requiring custom OAuth implementation for each
+- **User Context Management**: Automatic user session isolation vs single-user token management
+- **Token Lifecycle**: Automatic refresh and rotation vs manual token handling
+- **Permission Scoping**: Tool-level scope definitions vs application-wide permissions
+
+**Migration Strategy**: Once arcade.dev implements MCP with proper authentication, **immediately migrate back to MCP** for standard compliance and ecosystem benefits. According to [arcade.dev's MCP overview](https://docs.arcade.dev/home/mcp-overview), they are actively contributing to MCP authorization specifications and plan to extend the protocol for production-ready tool authorization.
+
+## 🔐 Authentication: Current Reality vs Future Standards
+
+### Current MCP Authorization Status
+
+The [MCP Authorization specification](https://modelcontextprotocol.io/specification/2025-03-26/basic/authorization) defines a comprehensive OAuth 2.1-based framework, but faces significant implementation challenges:
+
+**MCP Authorization Specification Features**:
+- **OAuth 2.1 Support**: Authorization code and client credentials grant types
+- **Dynamic Client Registration**: Automatic client registration with MCP servers
+- **PKCE Required**: Code challenges for all public clients
+- **Metadata Discovery**: Automatic endpoint discovery via `.well-known/oauth-authorization-server`
+- **Third-Party Auth**: Support for delegated authorization through external providers
+
+**Current Implementation Gaps**:
+- **Limited Production Implementations**: Most MCP servers are single-user, development-focused
+- **Complex Integration**: Requires implementing OAuth 2.1, PKCE, dynamic registration, and metadata discovery
+- **Multi-User Challenges**: No established patterns for user context switching in shared environments
+- **Enterprise Gaps**: Missing audit trails, session management, and compliance features
+
+### Arcade.dev's Authentication Solution
+
+Arcade.dev provides production-ready authentication that addresses all current MCP limitations:
+
+**Enterprise OAuth Management**:
+```python
+# Simple tool-level authentication
+@tool(requires_auth=GitHub(scopes=["repo", "issues"]))
+def create_github_issue(context: ToolContext, title: str, body: str):
+    # Automatic token management, no OAuth complexity
+    github_client = Github(context.authorization.token)
+    # Tool automatically has user's GitHub permissions
+```
+
+**Multi-User Production Support**:
+- **User Context Isolation**: Each user gets independent authentication sessions
+- **Automatic Token Management**: Refresh tokens, expiration handling, scope validation
+- **Enterprise Security**: Audit trails, session timeouts, permission monitoring
+- **Built-in Providers**: 15+ OAuth providers ready for production use
+
+**vs MCP Authorization Implementation**:
+- **Arcade.dev**: `@tool(requires_auth=Slack(...))` → Works immediately
+- **MCP Auth**: Implement OAuth 2.1 + PKCE + Dynamic Registration + Metadata Discovery + Token Management
+
+### Why This Matters
+
+**Current State (2025)**: MCP authorization specification exists but lacks production implementations that handle enterprise requirements.
+
+**Arcade.dev Bridge**: Provides immediate production-ready authentication while the MCP ecosystem matures.
+
+**Future Direction**: When MCP authorization implementations reach production readiness with enterprise features, migrate to MCP for standardization benefits.
 
 ## 📡 API Reference
 
