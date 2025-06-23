@@ -349,9 +349,6 @@ graph TD
     Q[Domain Restrictions] --> I
     Q --> J
     
-    style F fill:#e1f5fe
-    style G fill:#e8f5e8
-    style H fill:#e8f5e8
 ```
 
 ### Arcade.dev API Architecture Benefits
