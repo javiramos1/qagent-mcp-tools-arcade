@@ -2,7 +2,7 @@
 
 **This project showcases the simplest approach to building documentation Q&A systems** - demonstrating how arcade.dev's API eliminates both RAG complexity AND the need to manage your own search/scraping infrastructure with enhanced security over MCP.
 
-> **🚀 Looking Forward**: While this version uses arcade.dev's direct API for maximum simplicity and security, Arcade.dev is actively contributing to the MCP specification and will soon provide full MCP protocol support with enterprise-grade authentication. This ensures a future migration path when MCP reaches production readiness.
+> **🔄 Temporary Security Enhancement**: This version uses arcade.dev's direct API **temporarily** to address current MCP authentication limitations. While MCP represents the superior standardized approach for AI tool integration, it currently lacks enterprise-grade authentication. Arcade.dev is actively working on MCP protocol support with proper authentication - **this will be the recommended approach once available** as standards are crucial for long-term maintainability and ecosystem compatibility.
 
 ## 🔄 Project Evolution
 
@@ -11,22 +11,25 @@ This is the **fourth project** in a series exploring AI agent architectures:
 1. **[Original Search-First Agent](https://github.com/javiramos1/qagent)** - Proved RAG is often overkill by using direct search APIs with LangChain local tools
 2. **[Custom MCP Server Agent](https://github.com/javiramos1/qagent-mcp)** - Enhanced with Model Context Protocol, separating tools into external MCP server process  
 3. **[Arcade.dev MCP Agent](https://github.com/javiramos1/qagent-mcp-tools)** - Ultimate simplification using arcade.dev's managed MCP service
-4. **[Arcade.dev API Agent](https://github.com/javiramos1/qagent-mcp-tools-arcade)** - **This project** - Enhanced security using arcade.dev's API directly without MCP
+4. **[Arcade.dev API Agent](https://github.com/javiramos1/qagent-mcp-tools-arcade)** - **This project** - Temporary security enhancement using arcade.dev's API directly (non-standard approach)
 
-Instead of using MCP protocol, this version uses arcade.dev's API directly through the `langchain-arcade` package, providing enhanced security and simpler integration while maintaining all the benefits of managed tools.
+Instead of using MCP protocol, this version uses arcade.dev's API directly through the `langchain-arcade` package. **This is a temporary approach** to address current MCP authentication limitations while maintaining security benefits. **MCP remains the preferred long-term solution** due to its standardized approach, and arcade.dev plans to support it with proper authentication soon.
 
 > **📚 For detailed analysis of why search-first approaches beat RAG in 2025** (cost comparisons, performance advantages, model selection strategies), see the [original project documentation](https://github.com/javiramos1/qagent#-why-search-first-beats-rag-in-2025).
 
-## 🆕 What's New with Arcade.dev API
+## 🆕 What's New with Arcade.dev API (Temporary Approach)
 
-This enhanced version uses **arcade.dev's API directly** instead of MCP protocol:
+This version uses **arcade.dev's API directly** as a **temporary security enhancement** while awaiting MCP authentication support:
 
-- **🚀 Zero Setup**: No need to implement or host your own search/scraping tools
-- **🔐 Enhanced Security**: Direct API authentication with arcade.dev (no MCP server exposure)
+- **🔐 Current Security Benefit**: Direct API authentication addresses MCP's authentication gap
+- **⚠️ Non-Standard Approach**: Bypasses MCP protocol standardization (temporary trade-off)
+- **🔄 Migration Path**: Will transition back to MCP once arcade.dev implements authentication
 - **🛠️ Pre-built Tools**: Search and scraping capabilities provided out-of-the-box
 - **🔑 Single API Key**: Only need arcade.dev API key (no SerpAPI, Firecrawl, etc.)
-- **📡 Direct API Integration**: Use `langchain-arcade` for seamless LangChain integration
+- **📡 Direct Integration**: Use `langchain-arcade` for API access (temporary non-MCP approach)
 - **🐳 Simplified Deployment**: Single-service Docker setup
+
+**Important**: This approach prioritizes **security over standardization** as a temporary measure. MCP protocol support with authentication will be the recommended long-term solution.
 
 ## 🚀 Key Features
 
@@ -104,17 +107,23 @@ This required:
 - Handling MCP server communication
 - MCP-specific error handling
 
-### New Arcade.dev API Approach
+### New Arcade.dev API Approach (Temporary)
 
-Now we use direct API integration:
+Now we use direct API integration **as a temporary security measure**:
 - [Search.SearchGoogle](https://docs.arcade.dev/toolkits/search/google_search) via API
 - [Web.ScrapeUrl](https://docs.arcade.dev/toolkits/development/web/web#scrapeurl) via API
 
-Benefits:
-- **Enhanced Security**: Direct API authentication vs public MCP endpoint
-- **Simpler Integration**: Standard HTTP API calls vs MCP protocol
-- **Better Error Handling**: Native API responses vs MCP message parsing
-- **Reduced Dependencies**: `langchain-arcade` vs `fastmcp` client
+**Temporary Benefits** (until MCP authentication is available):
+- **Enhanced Security**: Direct API authentication vs current MCP limitations
+- **Immediate Solution**: Addresses authentication gap in current MCP implementations
+
+**Trade-offs** (why this is temporary):
+- **❌ Non-Standard**: Bypasses MCP protocol standardization
+- **❌ Vendor Lock-in**: Direct API integration reduces portability
+- **❌ Ecosystem Fragmentation**: Moves away from emerging MCP standards
+- **❌ Future Migration**: Will need to transition back to MCP when authentication is ready
+
+**Future Direction**: Once arcade.dev implements MCP with proper authentication, **migrating back to MCP will be the recommended approach** for standard compliance and ecosystem compatibility.
 
 ## 🔑 Setting Up API Access
 
@@ -139,7 +148,7 @@ Benefits:
    ARCADE_API_KEY=your_arcade_api_key_here
    ```
 
-**Security Note:** This version uses arcade.dev's authenticated API directly for enhanced security compared to public MCP endpoints.
+**Security Note:** This version uses arcade.dev's authenticated API directly as a **temporary security enhancement** while MCP authentication support is being developed. **MCP will be the preferred approach** once proper authentication is available.
 
 ## 🚀 Quick Start
 
@@ -188,7 +197,7 @@ GOOGLE_API_KEY=your_google_key_here
 ARCADE_API_KEY=your_arcade_api_key_here
 ```
 
-**Security Note:** Keep both API keys secure and never commit them to public repositories. This version uses arcade.dev's authenticated API for enhanced security.
+**Security Note:** Keep both API keys secure and never commit them to public repositories. This version uses arcade.dev's authenticated API as a **temporary security enhancement** while awaiting MCP authentication support.
 
 **🚀 Installation Options:** Choose between local development (Option 1-2) or Docker (Option 3). **Local development is recommended** since no separate MCP server setup is required.
 
@@ -384,15 +393,26 @@ graph TD
 
 ### Arcade.dev API vs MCP Protocol
 
-**Previous Version**: [MCP-based approach](https://github.com/javiramos1/qagent-mcp-tools) with FastMCP client  
-**Current Version**: Direct API integration with enhanced security
+**Current Reality**: [MCP-based approach](https://github.com/javiramos1/qagent-mcp-tools) represents the **standard protocol**  
+**Temporary Approach**: Direct API integration addresses authentication limitations
 
-This approach provides:
-- **Enhanced Security**: Private API authentication vs public MCP endpoints
-- **Simpler Integration**: Standard HTTP API calls vs MCP protocol complexity
-- **Better Error Handling**: Native API responses vs MCP message parsing
-- **Reduced Dependencies**: Single langchain-arcade package vs MCP client stack
-- **Direct Tool Access**: No protocol overhead, direct tool invocation
+**Why MCP is Superior (Long-term)**:
+- **🏗️ Standardization**: Industry-wide protocol for AI tool integration
+- **🔗 Interoperability**: Works across different AI platforms and providers
+- **🌐 Ecosystem**: Growing ecosystem of MCP-compatible tools and services
+- **🔮 Future-Proof**: Designed for long-term AI infrastructure needs
+
+**Current MCP Limitations**:
+- **🔐 Authentication Gap**: Lacks enterprise-grade authentication mechanisms
+- **🏢 Production Readiness**: Security model not yet suitable for enterprise deployment
+
+**This Project's Trade-offs**:
+- **✅ Immediate Security**: Direct API authentication solves current authentication needs
+- **❌ Non-Standard**: Bypasses emerging MCP protocol standards
+- **❌ Vendor Lock-in**: Direct API ties implementation to arcade.dev specifically
+- **❌ Ecosystem Isolation**: Doesn't contribute to broader MCP ecosystem development
+
+**Migration Strategy**: Once arcade.dev implements MCP with proper authentication, **immediately migrate back to MCP** for standard compliance and ecosystem benefits.
 
 ## 📡 API Reference
 
@@ -517,13 +537,15 @@ These tools are pre-built, maintained, and scaled by arcade.dev, so you don't ne
 - ❌ MCP protocol complexity
 - ❌ Public MCP endpoint security concerns
 
-### 4️⃣ Arcade.dev API (This Project)
-- ✅ **Simplest architecture** - Direct API integration
-- ✅ **Enhanced Security** - Private API authentication
-- ✅ **Zero tool maintenance** - Arcade.dev handles everything
-- ✅ **Zero infrastructure management** - No servers to deploy
-- ✅ **Built-in monitoring and scaling** - Enterprise-grade reliability
-- ✅ **Simplified Integration** - Native LangChain tool support
+### 4️⃣ Arcade.dev API (This Project - Temporary)
+- ✅ **Temporary Security Solution** - Addresses current MCP authentication gap
+- ❌ **Non-Standard Approach** - Bypasses MCP protocol standardization
+- ❌ **Vendor Lock-in** - Direct API integration reduces portability
+- ❌ **Ecosystem Fragmentation** - Moves away from emerging standards
+- ❌ **Technical Debt** - Requires migration back to MCP when available
+- **🔄 Migration Required**: Will need to transition to MCP once authentication is ready
+
+**Recommendation**: This approach should be **temporary only** - MCP with authentication will be the superior long-term solution.
 
 ## 🔒 API-Enhanced Site Restrictions
 
@@ -753,28 +775,50 @@ This project represents the **culmination of four architectural approaches** to 
 3. **[Arcade.dev MCP](https://github.com/javiramos1/qagent-mcp-tools)**: Simplified using managed MCP services
 4. **[Arcade.dev API](https://github.com/javiramos1/qagent-mcp-tools-arcade)**: **This project** - Ultimate simplification with enhanced security
 
-### Arcade.dev API Advantages
+### Arcade.dev API Advantages (Temporary)
 
-- **🚀 Maximum Simplicity**: Direct API integration, zero protocol overhead
-- **🔐 Enhanced Security**: Private API authentication vs public endpoints
-- **📈 Enterprise Scale**: Built-in monitoring, auto-scaling, global distribution
-- **🛡️ Production Security**: Managed credentials, audit trails, compliance-ready
-- **💰 Cost Optimization**: No server costs, pay-per-use pricing
-- **⚡ Developer Velocity**: Focus purely on business logic, not tool management
+**Current Security Benefits**:
+- **🔐 Enhanced Security**: Private API authentication addresses MCP authentication gap
+- **⚡ Immediate Solution**: Resolves current production security needs
+
+**Significant Disadvantages** (Why this is temporary):
+- **❌ Non-Standard**: Abandons industry-standard MCP protocol
+- **❌ Vendor Lock-in**: Direct API integration reduces flexibility and portability
+- **❌ Ecosystem Fragmentation**: Works against MCP standardization efforts
+- **❌ Technical Debt**: Requires future migration when MCP authentication arrives
+- **❌ Reduced Interoperability**: Cannot work with other MCP-compatible systems
+- **❌ Standards Violation**: Goes against emerging AI tool integration standards
+
+**Long-term Strategy**: This approach provides **temporary security** while **sacrificing standardization** - MCP with authentication will be the recommended production approach.
 
 ### When to Use Each Approach
 
-**✅ Choose Arcade.dev API When:**
-- Want the simplest possible setup for production AI systems
-- Need enhanced security with private API authentication
-- Prefer managed services over custom tool development
-- Want to focus on business logic rather than tool maintenance
-- Require automatic scaling and monitoring without protocol complexity
+### When to Use Each Approach
 
-**🔄 Use Arcade.dev MCP When:**
-- Need to integrate with existing MCP-based systems
-- Working in environments that standardize on MCP protocol
-- Want tool isolation benefits of MCP (see [MCP project](https://github.com/javiramos1/qagent-mcp-tools))
+**🔄 Recommended: Use Arcade.dev MCP When Available** (Future):
+- MCP provides **industry standardization** for AI tool integration
+- Ensures **ecosystem interoperability** across platforms and providers
+- Follows **emerging standards** for long-term maintainability
+- Supports **vendor independence** and tool portability (see [MCP project](https://github.com/javiramos1/qagent-mcp-tools))
+
+**✅ Use Arcade.dev API Temporarily When**:
+- Current MCP implementations lack required enterprise authentication
+- **Immediate security needs** outweigh standardization benefits
+- Need production deployment before MCP authentication is ready
+- **This is a temporary solution** until MCP protocol matures
+
+**🔄 Use Custom MCP Server When:**
+- Need highly specialized or proprietary tools
+- Have specific compliance requirements for tool execution
+- Want complete control over tool infrastructure
+- Building tools not available on arcade.dev (see [custom MCP project](https://github.com/javiramos1/qagent-mcp))
+
+**🔄 Use Original Search-First When:**
+- Building simple prototypes or demos
+- Single-container deployment is sufficient
+- Development speed over architecture is priority (see [original project](https://github.com/javiramos1/qagent))
+
+**Migration Recommendation**: **Move to MCP immediately** once arcade.dev implements proper authentication - standardization is essential for long-term ecosystem health.
 
 > **🚀 Future MCP Support**: Arcade.dev is actively contributing to the MCP specification and plans to provide full MCP protocol support with enterprise-grade authentication very soon. According to their [MCP overview](https://docs.arcade.dev/home/mcp-overview), they're working on extending the protocol for tool authorization and production-ready authentication. This will enable seamless migration from the current API approach to MCP protocol when it reaches enterprise readiness.
 
@@ -791,7 +835,7 @@ This project represents the **culmination of four architectural approaches** to 
 
 > **📚 For the complete search-first vs RAG analysis**, cost comparisons, and performance research, see the [original project](https://github.com/javiramos1/qagent).
 
-**Perfect for**: Organizations wanting to implement robust, scalable search-first AI systems with maximum security, minimal infrastructure overhead, and highest development velocity.
+**Perfect for**: Organizations needing **immediate security solutions** while waiting for MCP authentication support. **This is a temporary approach** - migrate to MCP with authentication as soon as it becomes available for proper standardization and ecosystem compatibility.
 
 ## 📄 License
 
